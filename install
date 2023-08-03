@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#Rich H install script. Installs git and Xdotools. Disables Meta key and changes permissions of setup and kiosk scripts which
+#are pulled from github.
+
 run_command() {
   if sudo -n true 2>/dev/null; then
     # No password prompt needed, can run the command with sudo directly
@@ -36,6 +39,8 @@ fi
 
 chmod +x /home/rich/Desktop/voykiosk/setup.sh
 chmod +x /home/rich/Desktop/voykiosk/kiosk.sh
+zenity --info --text="File permissions changed" --width=500
+
 
 # Run setup script
 bash /home/rich/Voykiosk/setup.sh
