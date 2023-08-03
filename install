@@ -1,0 +1,33 @@
+#!/bin/bash
+
+run_command() {
+  if sudo -n true 2>/dev/null; then
+    # No password prompt needed, can run the command with sudo directly
+    sudo "$@"
+  else
+    # Password is needed, prompt the user for it using Zenity
+    password=$(zenity --password --title="Enter the password for sudo" --width=500)
+    # Check if the user canceled the password entry
+    if [[ $? -ne 0 ]]; then
+      zenity --error --text="Password entry canceled. Exiting..."
+      exit 1
+    fi
+    # Execute the command with sudo using the password provided by the user
+    echo "$password" | sudo -S "$@"
+  fi
+}
+# Install Git (if not already installed)
+if ! command -v git &> /dev/null; then
+   run_command sudo apt install -y git
+fi
+
+# Clone the repository
+USERNAME="hamiltonrich"
+REPO="voyKiosk"
+CLONE_DIR="Voykiosk"  # Change this to the desired directory name
+
+if [ ! -d "$CLONE_DIR" ]; then
+    git clone "https://github.com/$USERNAME/$REPO.git" "$CLONE_DIR"
+else
+    echo "Directory $CLONE_DIR already exists. Skipping clone."
+fi
