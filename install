@@ -37,10 +37,10 @@ else
     zenity --info --text="directory $CLONE_DIR already exists. Skipping clone."
 fi
 
-chmod +x /home/rich/Desktop/voykiosk/setup.sh
-chmod +x /home/rich/Desktop/voykiosk/kiosk.sh
+chmod +x /home/voyage/Desktop/voyKiosk/setup.sh
+chmod +x /home/voyage/Desktop/voyKiosk/kiosk.sh
 zenity --info --text="File permissions changed" --width=500
 
 
 # Run setup script
-bash /home/rich/Voykiosk/setup.sh
+bash /home/voyage/voyKiosk/setup.sh
