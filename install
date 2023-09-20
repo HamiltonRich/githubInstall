@@ -1,7 +1,35 @@
 #!/bin/bash
 
-#Rich H install script. Installs git and Xdotools. Disables Meta key and changes permissions of setup and kiosk scripts which
-#are pulled from github.
+#Rich H install script. This script is placed on the desktop embedded in the custom installer.
+#Installs git and Xdotools. Sets WIFI to VoyMobile network. Clones the GitHub repo, changes the permissions
+#and runs the setup script.
+
+# Set wifi to voyMobile
+
+SSID=VOYMobile
+PASSWORD=SDDBkPBRbBS8EVjjBrqFyn4IxY2v
+
+# Create a new Wi-Fi connection
+nmcli connection add type wifi con-name "WiFi" ifname "*" ssid "$SSID" -- wifi-sec.key-mgmt wpa-psk wifi-sec.psk "$PASSWORD"
+
+# Check the exit status of the previous command
+if [ $? -eq 0 ]; then
+  # Set the connection to auto-connect
+  nmcli connection modify "WiFi" connection.autoconnect yes
+  
+  # Check the exit status of the previous command
+  if [ $? -eq 0 ]; then
+    # Display a success message
+    zenity --info --text="Wi-Fi connection setup succeeded." --width=500
+  else
+    # Display an error message
+    zenity --error --text="Error setting Wi-Fi connection to auto-connect." --width=500
+  fi
+else
+  # Display an error message
+  zenity --error --text="Error creating Wi-Fi connection." --width=500
+fi
+
 
 run_command() {
   if sudo -n true 2>/dev/null; then
@@ -29,7 +57,7 @@ if ! command -v git &> /dev/null; then
 # Clone the repository
 USERNAME="hamiltonrich"
 REPO="voyKiosk"
-CLONE_DIR="/home/rich/Desktop/voykiosk"  # Change this to the desired directory name
+CLONE_DIR="/home/voyage/Desktop/voykiosk"  # Change this to the desired directory name
 
 if [ ! -d "$CLONE_DIR" ]; then
     git clone "https://github.com/$USERNAME/$REPO.git" "$CLONE_DIR"
